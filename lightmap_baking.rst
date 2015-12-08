@@ -22,15 +22,15 @@ VRay参数
 1. Linear Workflow
 		a. VRay Render Setting:
 		
-		.. figure:: /images/vray_linear.png
+		.. figure:: /_images/vray_linear.png
 	
 		b. 所有颜色贴图需要添加VRay/Texture input gamma属性进行gamma校正：
 			
-		.. figure:: /images/vray_texture_gamma.png 
+		.. figure:: /_images/vray_texture_gamma.png 
 			
 		c. 对于Maya内置的Color swatch、Ramp、Light color等，不需再进行校正，Maya 2016的拾色器已经内置了Color Management，艺术家拾取的颜色就是最终渲染的颜色:
 			
-		.. figure:: /images/maya2016_color_picker.png 
+		.. figure:: /_images/maya2016_color_picker.png 
 
 2. 渲染质量调节
 		a. Sampler type = Adaptive (Adaptive DMC)
@@ -58,7 +58,7 @@ Batch Baking 2.0的使用
 2. 启动
 	Smartisan_Tools -> Batch Baking 2.0
 3. 界面
-	.. figure:: /images/batch_baking_ui.png
+	.. figure:: /_images/batch_baking_ui.png
 	
 	a. Output Path: 设定lightmap输出路径
 	b. 左侧列表显示场景中所有lightmap group。勾选的组将进行烘培。蓝色高亮显示表示该组有渲染参数Override。
