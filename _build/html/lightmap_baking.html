@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Lightmap 烘培 &mdash; Pipeline Documentation v0.0.1 documentation</title>
+  <title>Lightmap 烘培 &mdash; Smartisan VR 制作流程指南 v0.0.1 documentation</title>
   
 
   
@@ -30,7 +30,7 @@
   
 
   
-    <link rel="top" title="Pipeline Documentation v0.0.1 documentation" href="index.html"/>
+    <link rel="top" title="Smartisan VR 制作流程指南 v0.0.1 documentation" href="index.html"/>
         <link rel="prev" title="流程和分工" href="workflow.html"/> 
 
   
@@ -49,7 +49,7 @@
           
 
           
-            <a href="index.html" class="icon icon-home"> Pipeline Documentation
+            <a href="index.html" class="icon icon-home"> Smartisan VR 制作流程指南
           
 
           
@@ -87,6 +87,8 @@
 <li class="toctree-l1"><a class="reference internal" href="workflow.html">流程和分工</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="">Lightmap 烘培</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#id1">场景准备</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#vray">VRay参数</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#batch-baking-2-0">Batch Baking 2.0的使用</a></li>
 </ul>
 </li>
 </ul>
@@ -102,7 +104,7 @@
       
       <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
         <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-        <a href="index.html">Pipeline Documentation</a>
+        <a href="index.html">Smartisan VR 制作流程指南</a>
       </nav>
 
 
@@ -142,6 +144,7 @@
 <dt>检查单体的Asset</dt>
 <dd><ol class="first last loweralpha simple">
 <li>导入场景前需要确保有且只有一套UV，并命名为“UVChannel_1”。</li>
+<li>确保所有参数类型为Phong</li>
 </ol>
 </dd>
 </dl>
@@ -149,22 +152,108 @@
 <li><dl class="first docutils">
 <dt>将资产导入Maya进行拼装</dt>
 <dd><ol class="first last loweralpha simple">
-<li>保持材质命名不变，diffuse、emission、transparency等参数等值转换（工具实现）</li>
-<li>根据需要对场景进行Lightmap分组，自动生成 UVChannel_3</li>
+<li>保持材质命名不变，diffuse、emission、transparency等参数等值转换为VRayMtl（工具实现）</li>
+<li>根据需要对场景进行Lightmap分组，分组命名规范为：Lightmap_Group_00 ~ Lightmap_Group_xx</li>
+<li>自动生成 UVChannel_3</li>
+</ol>
+</dd>
+</dl>
+</li>
+</ol>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">场景整合相关工具待开发（辅助分组，自动UV，材质转换 ）</p>
+</div>
+</div>
+<hr class="docutils" />
+<div class="section" id="vray">
+<h2>VRay参数<a class="headerlink" href="#vray" title="Permalink to this headline">¶</a></h2>
+<ol class="arabic">
+<li><dl class="first docutils">
+<dt>Linear Workflow</dt>
+<dd><ol class="first loweralpha simple">
+<li>VRay Render Setting:</li>
+</ol>
+<div class="figure">
+<img alt="_images/vray_linear.png" src="_images/vray_linear.png" />
+</div>
+<ol class="loweralpha simple" start="2">
+<li>所有颜色贴图需要添加VRay/Texture input gamma属性进行gamma校正：</li>
+</ol>
+<div class="figure">
+<img alt="_images/vray_texture_gamma.png" src="_images/vray_texture_gamma.png" />
+</div>
+<ol class="loweralpha simple" start="3">
+<li>对于Maya内置的Color swatch、Ramp、Light color等，不需再进行校正，Maya 2016的拾色器已经内置了Color Management，艺术家拾取的颜色就是最终渲染的颜色:</li>
+</ol>
+<div class="last figure">
+<img alt="_images/maya2016_color_picker.png" src="_images/maya2016_color_picker.png" />
+</div>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>渲染质量调节</dt>
+<dd><ol class="first last loweralpha">
+<li><p class="first">Sampler type = Adaptive (Adaptive DMC)</p>
+</li>
+<li><dl class="first docutils">
+<dt>调整渲染质量的方法</dt>
+<dd><p class="first">调整 Min/Max subdivs/Threshold， 直至几何体，textures达到合适的质量</p>
+<p>提高灯光 Sampling/Subdivs， 直至lighting，shadow和specular达到合适的质量</p>
+<p>提高GI Subdivs，直至GI层达到合适的质量</p>
+<p>提高材质上的Reflection/Refraction/SSS subdivs， 直至相应层达到合适的质量</p>
+<p class="last">保持SampleRate尽量少红色（红色表明DMC Samples不足，即便使用全部AA也无法满足Threshold，导致渲染效率下降）</p>
+</dd>
+</dl>
+</li>
+</ol>
+</dd>
+</dl>
+</li>
+</ol>
+</div>
+<hr class="docutils" />
+<div class="section" id="batch-baking-2-0">
+<h2>Batch Baking 2.0的使用<a class="headerlink" href="#batch-baking-2-0" title="Permalink to this headline">¶</a></h2>
+<ol class="arabic">
+<li><dl class="first docutils">
+<dt>功能</dt>
+<dd><ol class="first last loweralpha simple">
+<li>实现lightmap烘培自动化，批量完成大量物体烘培任务。</li>
+<li>灵活选取全局/局部参数进行烘培。</li>
+<li>灵活选择烘培组/物体。</li>
 </ol>
 </dd>
 </dl>
 </li>
 <li><dl class="first docutils">
-<dt>设置灯光，VRay参数</dt>
-<dd><ol class="first last loweralpha simple">
-<li>Linear Workflow</li>
-<li>AA参数</li>
+<dt>启动</dt>
+<dd><p class="first last">Smartisan_Tools -&gt; Batch Baking 2.0</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>界面</dt>
+<dd><div class="first figure">
+<img alt="_images/batch_baking_ui.png" src="_images/batch_baking_ui.png" />
+</div>
+<ol class="last loweralpha simple">
+<li>Output Path: 设定lightmap输出路径</li>
+<li>左侧列表显示场景中所有lightmap group。勾选的组将进行烘培。蓝色高亮显示表示该组有渲染参数Override。</li>
+<li>右侧参数面板控制渲染参数Override。当“Enable Override”勾选时，将使用当前组自身的参数进行烘培。</li>
+<li>右下“Meshes to bake”列表显示当前组内几何体，检查UVChannel_3状态。此列表内未勾选的几何体不会进行烘培（但仍贡献GI、阴影、反射 etc.）</li>
+<li>“Clear_Override”按钮重置所有override参数，“Start Baking”开始烘培进程。</li>
 </ol>
 </dd>
 </dl>
 </li>
 </ol>
+<div class="admonition important">
+<p class="first admonition-title">Important</p>
+<p class="last">开始烘培前，请仔细检查设定的Output Path， 以免覆盖已烘培好的lightmap。
+关闭Batch Baking对话框后，Output Path将被重置为默认值。</p>
+</div>
 </div>
 </div>
 
@@ -185,7 +274,7 @@
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2015, Pipeline Documentation.
+        &copy; Copyright 2015, Smartisan Technology.
 
     </p>
   </div>

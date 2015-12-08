@@ -47,9 +47,9 @@ source_suffix = '.rst'
 master_doc = 'index'
 
 # General information about the project.
-project = u'Pipeline Documentation'
-copyright = u'2015, Pipeline Documentation'
-author = u'Pipeline Documentation'
+project = u'Smartisan VR 制作流程指南'
+copyright = u'2015, Smartisan Technology'
+author = u'Ding Wei'
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
@@ -286,9 +286,9 @@ texinfo_documents = [
 
 
 # on_rtd is whether we are on readthedocs.org, this line of code grabbed from docs.readthedocs.org
-on_rtd = os.environ.get('READTHEDOCS', None) == 'True'
+'''on_rtd = os.environ.get('READTHEDOCS', None) == 'True'
 if not on_rtd:  # only import and set the theme if we're building docs locally
     import sphinx_rtd_theme
     html_theme = 'sphinx_rtd_theme'
-    html_theme_path = [sphinx_rtd_theme.get_html_theme_path()]
+    html_theme_path = [sphinx_rtd_theme.get_html_theme_path()]'''
 # otherwise, readthedocs.org uses their theme by default, so no need to specify it
