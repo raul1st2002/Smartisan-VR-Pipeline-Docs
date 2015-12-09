@@ -19,11 +19,11 @@ Smartisan VR 制作流程指南
 .. toctree::
    :maxdepth: 2
    
-   guide_line
-   naming_convention
-   file_structure
-   workflow
-   lightmap_baking
+   subpages/guide_line
+   subpages/naming_convention
+   subpages/file_structure
+   subpages/workflow
+   subpages/lightmap_baking
 
 Indices and tables
 ==================
